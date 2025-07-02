@@ -47,7 +47,15 @@ async def predict(file: UploadFile = File(...)):
         prediction = model.predict(image[np.newaxis, ...])
         print(f"🔮 Prediction: {prediction}")
 
-        result = {"class": int(np.argmax(prediction))}
+        class_names = ["Apple scab", "Black rot", "Cedar apple rust", "Healthy"]
+        predicted_index = int(np.argmax(prediction))
+        predicted_class = class_names[predicted_index]
+
+        result = {
+            "class_index": predicted_index,
+            "class_name": predicted_class,
+            "confidence": float(np.max(prediction))
+        }
         return result
     except Exception as e:
         print("❌ Error in /predict:", e)
