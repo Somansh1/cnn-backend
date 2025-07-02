@@ -25,6 +25,11 @@ model = load_model("model.h5")
 def root():
     return {"message": "CNN Image Classifier API"}
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     image_bytes = await file.read()
