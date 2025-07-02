@@ -20,7 +20,7 @@ Markdown==3.5.2
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
-ml_dtypes==0.2.0
+ml_dtypes==0.5.1
 numpy==1.26.4
 opt-einsum==3.3.0
 packaging==25.0
