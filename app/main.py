@@ -36,7 +36,7 @@ async def predict(file: UploadFile = File(...)):
         contents = await file.read()
         print(f"📥 File size: {len(contents)}")
 
-        image = Image.open(BytesIO(contents))
+        image = Image.open(BytesIO(contents)).convert("RGB")
         print(f"🖼️ Image format: {image.format}, size: {image.size}")
 
         image = image.resize((224, 224))
