@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from keras.models import load_model
 from PIL import Image
 import numpy as np
-import io
+from io import BytesIO
 
 app = FastAPI()
 
@@ -34,8 +34,20 @@ def health_check():
 async def predict(file: UploadFile = File(...)):
     try:
         contents = await file.read()
-        print(f"✅ File received: {file.filename}, size={len(contents)} bytes")
-        return {"message": "File received successfully", "filename": file.filename}
+        print(f"📥 File size: {len(contents)}")
+
+        image = Image.open(BytesIO(contents))
+        print(f"🖼️ Image format: {image.format}, size: {image.size}")
+
+        image = image.resize((224, 224))
+        image = np.array(image) / 255.0
+        print(f"✅ Image array shape: {image.shape}")
+
+        prediction = model.predict(image[np.newaxis, ...])
+        print(f"🔮 Prediction: {prediction}")
+
+        result = {"class": int(np.argmax(prediction))}
+        return result
     except Exception as e:
-        print(f"❌ Error in /predict: {e}")
-        return {"error": "Failed to process image"}
+        print("❌ Error in /predict:", e)
+        return {"error": str(e)}
