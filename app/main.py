@@ -32,13 +32,10 @@ def health_check():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    image_bytes = await file.read()
-    image = Image.open(io.BytesIO(image_bytes)).resize((224, 224))
-    image_array = np.array(image) / 255.0
-    image_array = np.expand_dims(image_array, axis=0)
-
-    predictions = model.predict(image_array)[0]
-    confidence = float(np.max(predictions))
-    label = int(np.argmax(predictions))  # You can map this to class names
-
-    return {"label": label, "confidence": confidence}
+    try:
+        contents = await file.read()
+        print(f"✅ File received: {file.filename}, size={len(contents)} bytes")
+        return {"message": "File received successfully", "filename": file.filename}
+    except Exception as e:
+        print(f"❌ Error in /predict: {e}")
+        return {"error": "Failed to process image"}
