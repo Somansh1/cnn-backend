@@ -41,6 +41,7 @@ async def predict(file: UploadFile = File(...)):
 
         image = image.resize((224, 224))
         image = np.array(image) / 255.0
+        image = image.reshape(1, 224, 224, 3)
         print(f"✅ Image array shape: {image.shape}")
 
         prediction = model.predict(image[np.newaxis, ...])
