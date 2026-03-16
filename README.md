@@ -1,6 +1,6 @@
 # Apple Leaf Disease Detection — Backend
 
-Flask inference API for a custom CNN that classifies apple leaf diseases across 38 classes from the [PlantVillage dataset](https://www.tensorflow.org/datasets/catalog/plant_village). Accepts an image, runs it through a Keras `.h5` model, and returns the predicted class with per-class confidence scores.
+Flask inference API for a custom CNN that classifies apple leaf diseases across 4 classes from the [PlantVillage dataset](https://www.tensorflow.org/datasets/catalog/plant_village). Accepts an image, runs it through a Keras `.h5` model, and returns the predicted class with per-class confidence scores.
 
 **Frontend repo:** [cnn-frontend](https://github.com/Somansh1/cnn-frontend)  
 **Live demo:** [app-dlite-net.vercel.app](https://app-dlite-net.vercel.app)
@@ -13,7 +13,7 @@ Flask inference API for a custom CNN that classifies apple leaf diseases across 
 |---|---|
 | Architecture | Custom CNN (built from scratch) |
 | Dataset | PlantVillage |
-| Classes | 5 (diseases + healthy) |
+| Classes | 4 (diseases + healthy) |
 | Accuracy | 99.16% on test set |
 | Model size | 8 MB (`.h5`) |
 | Framework | TensorFlow / Keras |
