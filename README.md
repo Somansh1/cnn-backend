@@ -1,81 +1,93 @@
-# CNN Backend
+# Apple Leaf Disease Detection — Backend
 
-A backend service for managing and running Convolutional Neural Network (CNN) workloads, powered primarily by Python. This project is designed to provide scalable, flexible endpoints and utilities for deploying, training, and operating CNN models. Minor integrations and operational scripts are provided in Shell and as a `Procfile` for easy deployment.
+Flask inference API for a custom CNN that classifies apple leaf diseases across 38 classes from the [PlantVillage dataset](https://www.tensorflow.org/datasets/catalog/plant_village). Accepts an image, runs it through a Keras `.h5` model, and returns the predicted class with per-class confidence scores.
 
-## Features
+**Frontend repo:** [cnn-frontend](https://github.com/Somansh1/cnn-frontend)  
+**Live demo:** [app-dlite-net.vercel.app](https://app-dlite-net.vercel.app)
 
-- RESTful API interface for model inference and training (Python-based)
-- Support for multiple CNN architectures
-- Easy to deploy (Heroku-ready, via `Procfile`)
-- Shell scripts for environment setup and automation
+---
 
-## Language Composition
+## Model
 
-- **Python:** 92.6%
-- **Shell:** 4%
-- **Procfile:** 3.4%
+| Property | Value |
+|---|---|
+| Architecture | Custom CNN (built from scratch) |
+| Dataset | PlantVillage |
+| Classes | 5 (diseases + healthy) |
+| Accuracy | 99.16% on test set |
+| Model size | 8 MB (`.h5`) |
+| Framework | TensorFlow / Keras |
 
-## Getting Started
+## API
 
-### Prerequisites
+### `POST /predict`
 
-- Python 3.8+
-- pip (Python package manager)
-- (Optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) if deploying to Heroku
-- (Optional) Docker, if running in a containerized environment
+Accepts a leaf image and returns the top predicted class with confidence scores.
 
-### Installation
+**Request**
+```
+Content-Type: multipart/form-data
+Body: image (file)
+```
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/Somansh1/cnn-backend.git
-   cd cnn-backend
-   ```
-2. Install Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+**Response**
+```json
+{
+  "predicted_class": "Apple___Apple_scab",
+  "confidence": 0.9812,
+  "all_scores": {
+    "Apple___Apple_scab": 0.9812,
+    "Apple___Black_rot": 0.0103,
+    ...
+  }
+}
+```
 
-### Running Locally
+### `GET /health`
+
+Returns `200 OK` if the service is running and the model is loaded.
+
+## Getting started
+
+**Prerequisites:** Python 3.8+, pip
 
 ```bash
-python app.py
+git clone https://github.com/Somansh1/cnn-backend.git
+cd cnn-backend
+pip install -r requirements.txt
 ```
-*(Replace `app.py` with your main file if different)*
 
-The backend will start on a default port (typically 5000). You can interact with the REST API using `curl`, [Postman](https://www.postman.com/), or any HTTP client.
+Place your trained model file in the project root (or update the path in `app.py`):
 
-### Deployment
+```
+cnn-backend/
+├── app.py
+├── model.h5          # ← your trained Keras model
+├── requirements.txt
+├── Procfile
+└── scripts/
+```
 
-This project is configured for deployment via [Heroku](https://www.heroku.com/):
+```bash
+python app.py         # starts on http://localhost:5000
+```
+
+## Deployment
+
+Configured for Heroku via `Procfile`:
 
 ```bash
 heroku create your-app-name
 git push heroku main
 ```
 
-Or use the included `Procfile` and shell scripts for your preferred environment.
+The `scripts/` directory contains shell helpers for environment setup.
 
-## Project Structure
+## Related
 
-```
-cnn-backend/
-│
-├── app.py            # Main application entry point
-├── requirements.txt  # Python dependencies
-├── Procfile          # Process definition for Heroku
-├── scripts/          # Shell scripts for setup, deployment, etc.
-└── ...
-```
-
-## Contributing
-
-Contributions are welcome! Please open an issue or a pull request to suggest improvements or add new features.
+- **Frontend:** React app with image upload and confidence score display — [cnn-frontend](https://github.com/Somansh1/cnn-frontend)
+- **Training notebook:** Available on request
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Contact
-
-- GitHub: [Somansh1](https://github.com/Somansh1)
+MIT
